@@ -1,51 +1,46 @@
 package com.xantrix.webapp.UnitTest.ControllerTest;
 
-import com.xantrix.webapp.Application;
-import com.xantrix.webapp.entities.Articoli;
-import com.xantrix.webapp.repository.ArticoliRepository;
-
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-//import java.util.Locale;
-
-import org.junit.Before;
-import org.junit.FixMethodOrder;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.MethodSorters;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
+import org.junit.jupiter.api.Order;
+import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ContextConfiguration;
-//import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.test.web.servlet.setup.DefaultMockMvcBuilder;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
-@RunWith(SpringRunner.class)
+import com.xantrix.webapp.Application;
+import com.xantrix.webapp.entities.Articolo;
+import com.xantrix.webapp.repository.ArticoliRepository;
+
 @ContextConfiguration(classes = Application.class)
 @SpringBootTest
-@FixMethodOrder(MethodSorters.NAME_ASCENDING)
-public class InsertArtTest
-{
+@TestMethodOrder(OrderAnnotation.class)
+public class InsertArtTest {
 	 
     private MockMvc mockMvc;
 	
 	@Autowired
-	private WebApplicationContext wac;
+	private WebApplicationContext webAppCtx;
 	
 	@Autowired
-	ArticoliRepository articoliRepository;
+	private ArticoliRepository articoliRepository;
 	
-	@Before
-	public void setup()
-	{
-		this.mockMvc = MockMvcBuilders.webAppContextSetup(wac).build();
+	@BeforeEach
+	public void setup() {
+		DefaultMockMvcBuilder webAppContextSetup = MockMvcBuilders.webAppContextSetup(webAppCtx);
+		this.mockMvc = webAppContextSetup.build();
 	}
 	
 	private String ApiBaseUrl = "/api/articoli";
@@ -79,8 +74,8 @@ public class InsertArtTest
 			"}";
 	
 	@Test
-	public void A_testInsArticolo() throws Exception
-	{
+	@Order(1)
+	public void A_testInsArticolo() throws Exception {
 		mockMvc.perform(MockMvcRequestBuilders.post(ApiBaseUrl + "/inserisci")
 				.contentType(MediaType.APPLICATION_JSON)
 				.content(JsonData)
@@ -91,12 +86,13 @@ public class InsertArtTest
 
 				.andDo(print());
 
-				assertThat(articoliRepository.findByCodArt("123Test"))
-				.extracting(Articoli::getCodArt)
+				assertThat(this.articoliRepository.findByCodArt("123Test"))
+				.extracting(Articolo::getCodArt)
 				.isEqualTo("123Test");
 	}
 	
 	@Test
+	@Order(2)
 	public void B_testErrInsArticolo() throws Exception
 	{
 		mockMvc.perform(MockMvcRequestBuilders.post(ApiBaseUrl + "/inserisci")
@@ -138,8 +134,8 @@ public class InsertArtTest
 					"}";
 	
 	@Test
-	public void C_testErrInsArticolo() throws Exception
-	{
+	@Order(3)
+	public void C_testErrInsArticolo() throws Exception {
 		mockMvc.perform(MockMvcRequestBuilders.post(ApiBaseUrl + "/inserisci")
 				.contentType(MediaType.APPLICATION_JSON)
 				.content(ErrJsonData)
@@ -179,8 +175,8 @@ public class InsertArtTest
 			"}";
 	
 	@Test
-	public void D_testUpdArticolo() throws Exception
-	{
+	@Order(4)
+	public void D_testUpdArticolo() throws Exception {
 				
 		mockMvc.perform(MockMvcRequestBuilders.put(ApiBaseUrl + "/modifica")
 				.contentType(MediaType.APPLICATION_JSON)
@@ -191,8 +187,8 @@ public class InsertArtTest
 				.andExpect(jsonPath("$.message").value("Modifica Articolo 123Test Eseguita Con Successo"))
 				.andDo(print());
 		
-		assertThat(articoliRepository.findByCodArt("123Test"))
-		.extracting(Articoli::getIdStatoArt)
+		assertThat(this.articoliRepository.findByCodArt("123Test"))
+		.extracting(Articolo::getIdStatoArt)
 		.isEqualTo("2");
 		
 	}
@@ -226,8 +222,8 @@ public class InsertArtTest
 			"}";
 	
 	@Test
-	public void E_testErrUpdArticolo() throws Exception
-	{
+	@Order(5)
+	public void E_testErrUpdArticolo() throws Exception {
 		mockMvc.perform(MockMvcRequestBuilders.put(ApiBaseUrl + "/modifica")
 				.contentType(MediaType.APPLICATION_JSON)
 				.content(ErrJsonDataMod)
@@ -239,8 +235,8 @@ public class InsertArtTest
 	}
 	
 	@Test
-	public void F_testDelArticolo() throws Exception
-	{
+	@Order(6)
+	public void F_testDelArticolo() throws Exception {
 		mockMvc.perform(MockMvcRequestBuilders.delete(ApiBaseUrl + "/elimina/123Test")
 				.accept(MediaType.APPLICATION_JSON))
 				.andExpect(status().isOk())
@@ -250,8 +246,8 @@ public class InsertArtTest
 	}
 	
 	@Test
-	public void G_testErrDelArticolo() throws Exception
-	{
+	@Order(7)
+	public void G_testErrDelArticolo() throws Exception {
 		mockMvc.perform(MockMvcRequestBuilders.delete(ApiBaseUrl + "/elimina/123Test")
 				.contentType(MediaType.APPLICATION_JSON)
 				.content(ErrJsonDataMod)

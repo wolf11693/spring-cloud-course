@@ -6,40 +6,38 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import com.xantrix.webapp.Application;
-
-import org.junit.Before;
-import org.junit.FixMethodOrder;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.MethodSorters;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
+import org.junit.jupiter.api.Order;
+import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.test.web.servlet.setup.DefaultMockMvcBuilder;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
- 
+import com.xantrix.webapp.Application;
 
-@RunWith(SpringRunner.class)
+
 @ContextConfiguration(classes = Application.class)
 @SpringBootTest
-@FixMethodOrder(MethodSorters.NAME_ASCENDING)
+@TestMethodOrder(OrderAnnotation.class)
 public class SelectArtTest
 {
 private MockMvc mockMvc;
 	
 	@Autowired
-	private WebApplicationContext wac;
+	private WebApplicationContext webAppCtx;
 
-	@Before
-	public void setup()
-	{
-		this.mockMvc = MockMvcBuilders.webAppContextSetup(wac).build();
+	@BeforeEach
+	public void setup() {
+		DefaultMockMvcBuilder webAppCtxSetup = MockMvcBuilders.webAppContextSetup(webAppCtx);
+		this.mockMvc = webAppCtxSetup.build();
 
 	}
 	
@@ -77,13 +75,14 @@ private MockMvc mockMvc;
 	 * 
 	 */
 	@Test
-	public void A_listArtByEan() throws Exception
-	{
+	@Order(1)
+	public void A_listArtByEan() throws Exception {
 		mockMvc.perform(MockMvcRequestBuilders.get(ApiBaseUrl + "/cerca/ean/8008490000021")
 				.accept(MediaType.APPLICATION_JSON))
 				.andExpect(status().isOk())
 				.andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-				 //articoli
+				 
+				//articoli
 				.andExpect(jsonPath("$.codArt").exists())
 				.andExpect(jsonPath("$.codArt").value("002000301"))
 				.andExpect(jsonPath("$.descrizione").exists())
@@ -126,8 +125,8 @@ private MockMvc mockMvc;
 	private String Barcode = "8008490002138";
 	
 	@Test
-	public void B_ErrlistArtByEan() throws Exception
-	{
+	@Order(1)
+	public void B_ErrlistArtByEan() throws Exception {
 		mockMvc.perform(MockMvcRequestBuilders.get(ApiBaseUrl + "/cerca/ean/" + Barcode)
 				.contentType(MediaType.APPLICATION_JSON)
 				.content(JsonData)
@@ -139,8 +138,8 @@ private MockMvc mockMvc;
 	}
 	
 	@Test
-	public void C_listArtByCodArt() throws Exception
-	{
+	@Order(2)
+	public void C_listArtByCodArt() throws Exception {
 		mockMvc.perform(MockMvcRequestBuilders.get(ApiBaseUrl + "/cerca/codice/002000301")
 				.accept(MediaType.APPLICATION_JSON))
 				.andExpect(status().isOk())
@@ -152,8 +151,8 @@ private MockMvc mockMvc;
 	private String CodArt = "002000301b";
 	
 	@Test
-	public void D_ErrlistArtByCodArt() throws Exception
-	{
+	@Order(3)
+	public void D_ErrlistArtByCodArt() throws Exception {
 		mockMvc.perform(MockMvcRequestBuilders.get(ApiBaseUrl + "/cerca/codice/" + CodArt)
 				.contentType(MediaType.APPLICATION_JSON)
 				.content(JsonData)
@@ -167,8 +166,8 @@ private MockMvc mockMvc;
 	private String JsonData2 = "[" + JsonData + "]";
 
 	@Test
-	public void E_listArtByDesc() throws Exception
-	{
+	@Order(4)
+	public void E_listArtByDesc() throws Exception {
 		mockMvc.perform(MockMvcRequestBuilders.get(ApiBaseUrl + "/cerca/descrizione/ACQUA ULIVETO 15 LT")
 				.accept(MediaType.APPLICATION_JSON))
 				.andExpect(status().isOk())
@@ -179,8 +178,8 @@ private MockMvc mockMvc;
 	}
 	
 	@Test
-	public void G_TestErrlistArtByDesc() throws Exception
-	{
+	@Order(5)
+	public void G_TestErrlistArtByDesc() throws Exception {
 		String Filter = "123ABC";
 		
 		mockMvc.perform(MockMvcRequestBuilders.get(ApiBaseUrl + "/cerca/descrizione/" + Filter)
