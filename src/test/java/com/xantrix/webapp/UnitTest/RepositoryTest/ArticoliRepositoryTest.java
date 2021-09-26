@@ -16,19 +16,17 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ContextConfiguration;
 
 import com.xantrix.webapp.Application;
-import com.xantrix.webapp.entity.Articoli;
 import com.xantrix.webapp.entity.Articolo;
 import com.xantrix.webapp.entity.Barcode;
 import com.xantrix.webapp.entity.FamigliaAssortimento;
-import com.xantrix.webapp.entity.Ingrediente;
-import com.xantrix.webapp.repository.ArticoliRepository;
+import com.xantrix.webapp.repository.ArticoloRepository;
 
 @SpringBootTest()
 @ContextConfiguration(classes = Application.class)
 @TestMethodOrder(OrderAnnotation.class)
 public class ArticoliRepositoryTest {
 	@Autowired
-	private ArticoliRepository articoloRepository;
+	private ArticoloRepository articoloRepository;
 
 	@Test
 	@Order(1)
@@ -36,7 +34,7 @@ public class ArticoliRepositoryTest {
 		Articolo articolo = this.createArticolo();
 		this.articoloRepository.save(articolo);
 
-		assertThat(this.articoloRepository.findByCodArt("123Test"))
+		assertThat(this.articoloRepository.findByCodice("123Test"))
 			.extracting(Articolo::getDescrizione)
 			.isEqualTo("Articolo di Test");
 	}
@@ -62,7 +60,7 @@ public class ArticoliRepositoryTest {
 		Set<Barcode> barCodes = new HashSet<>();
 		Barcode barcode = new Barcode();
 		barcode.setArticolo(articolo);
-		barcode.setBarcode("CP");
+		barcode.setBarcodeString("CP");
 		barcode.setIdTipoArticolo(121312);
 		barCodes.add(barcode);
 		
@@ -89,7 +87,7 @@ public class ArticoliRepositoryTest {
 	@Test
 	@Order(4)
 	public void D_TestDelArticolo() {
-		Articolo articolo = this.articoloRepository.findByCodArt("123Test");
+		Articolo articolo = this.articoloRepository.findByCodice("123Test");
 		this.articoloRepository.delete(articolo);
 	}
 

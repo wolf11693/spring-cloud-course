@@ -4,6 +4,7 @@ import java.io.Serializable;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
@@ -16,6 +17,10 @@ public class Ingrediente implements Serializable {
 
 	private static final long serialVersionUID = 7763298881475779569L;
 
+	@Id
+	@Column(name = "IDINGREDIENTE")
+	private String codice;
+
 	@Column(name = "INFO")
 	private String info;
 
@@ -24,6 +29,14 @@ public class Ingrediente implements Serializable {
 	@JsonIgnore
 	// [INGREDIENTE] --(1,1)-------<==>-------(1,1)-- [ARTICOLO]
 	private Articolo articolo;
+
+	public String getCodice() {
+		return codice;
+	}
+
+	public void setCodice(String codice) {
+		this.codice = codice;
+	}
 
 	public String getInfo() {
 		return info;
@@ -44,7 +57,9 @@ public class Ingrediente implements Serializable {
 	@Override
 	public String toString() {
 		StringBuilder builder = new StringBuilder();
-		builder.append("Ingrediente [info=");
+		builder.append("Ingrediente [codice=");
+		builder.append(codice);
+		builder.append(", info=");
 		builder.append(info);
 		builder.append(", articolo=");
 		builder.append(articolo);
@@ -52,5 +67,4 @@ public class Ingrediente implements Serializable {
 		return builder.toString();
 	}
 
-	
 }

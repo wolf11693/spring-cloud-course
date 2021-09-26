@@ -19,7 +19,7 @@ public class Barcode implements Serializable {
 
 	@Id
 	@Column(name = "BARCODE")
-	private String barcode;
+	private String barcodeString;
 
 	@Column(name = "IDTIPOART")
 	private Integer idTipoArticolo;
@@ -30,12 +30,12 @@ public class Barcode implements Serializable {
 	// [BARCODE] --(1,1)-------<==>-------(1,N)-- [ARTICOLO]
 	private Articolo articolo;
 
-	public String getBarcode() {
-		return barcode;
+	public String getBarcodeString() {
+		return barcodeString;
 	}
 
-	public void setBarcode(String barcode) {
-		this.barcode = barcode;
+	public void setBarcodeString(String barcodeString) {
+		this.barcodeString = barcodeString;
 	}
 
 	public Articolo getArticolo() {
@@ -58,7 +58,7 @@ public class Barcode implements Serializable {
 	public String toString() {
 		StringBuilder builder = new StringBuilder();
 		builder.append("Barcode [barcode=");
-		builder.append(barcode);
+		builder.append(barcodeString);
 		builder.append(", idTipoArticolo=");
 		builder.append(idTipoArticolo);
 		builder.append(", articolo=");
