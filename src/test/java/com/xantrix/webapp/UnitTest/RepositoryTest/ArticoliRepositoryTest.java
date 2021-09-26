@@ -16,11 +16,11 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ContextConfiguration;
 
 import com.xantrix.webapp.Application;
-import com.xantrix.webapp.entities.Articoli;
-import com.xantrix.webapp.entities.Articolo;
-import com.xantrix.webapp.entities.Barcode;
-import com.xantrix.webapp.entities.FamigliaAssortimento;
-import com.xantrix.webapp.entities.Ingrediente;
+import com.xantrix.webapp.entity.Articoli;
+import com.xantrix.webapp.entity.Articolo;
+import com.xantrix.webapp.entity.Barcode;
+import com.xantrix.webapp.entity.FamigliaAssortimento;
+import com.xantrix.webapp.entity.Ingrediente;
 import com.xantrix.webapp.repository.ArticoliRepository;
 
 @SpringBootTest()

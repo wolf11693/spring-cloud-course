@@ -21,7 +21,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
 import com.xantrix.webapp.Application;
-import com.xantrix.webapp.entities.Articolo;
+import com.xantrix.webapp.entity.Articolo;
 import com.xantrix.webapp.repository.ArticoliRepository;
 
 @ContextConfiguration(classes = Application.class)

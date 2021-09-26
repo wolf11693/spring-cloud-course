@@ -1,4 +1,4 @@
-package com.xantrix.webapp.entities;
+package com.xantrix.webapp.entity;
 
 import java.io.Serializable;
 import java.util.Date;
