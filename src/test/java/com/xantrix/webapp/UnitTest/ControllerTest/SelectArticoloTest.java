@@ -27,7 +27,7 @@ import com.xantrix.webapp.Application;
 @ContextConfiguration(classes = Application.class)
 @SpringBootTest
 @TestMethodOrder(OrderAnnotation.class)
-public class SelectArtTest
+public class SelectArticoloTest
 {
 private MockMvc mockMvc;
 	
@@ -35,13 +35,12 @@ private MockMvc mockMvc;
 	private WebApplicationContext webAppCtx;
 
 	@BeforeEach
-	public void setup() {
+	public void init() {
 		DefaultMockMvcBuilder webAppCtxSetup = MockMvcBuilders.webAppContextSetup(webAppCtx);
 		this.mockMvc = webAppCtxSetup.build();
-
 	}
 	
-	private String ApiBaseUrl = "/api/articoli";
+	private final String API_BASE_URL = "/api/articoli";
 	
 	String JsonData =  
 			"{\n" + 
@@ -76,8 +75,10 @@ private MockMvc mockMvc;
 	 */
 	@Test
 	@Order(1)
-	public void A_listArtByEan() throws Exception {
-		mockMvc.perform(MockMvcRequestBuilders.get(ApiBaseUrl + "/cerca/ean/8008490000021")
+	public void testGetArticoliByBarcode() throws Exception {
+		final String theBarcode = "8008490000021";
+		
+		mockMvc.perform(MockMvcRequestBuilders.get(API_BASE_URL + "/cerca/" + theBarcode)
 				.accept(MediaType.APPLICATION_JSON))
 				.andExpect(status().isOk())
 				.andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
@@ -122,25 +123,28 @@ private MockMvc mockMvc;
 				.andDo(print());
 	}
 	
-	private String Barcode = "8008490002138";
 	
 	@Test
-	@Order(1)
-	public void B_ErrlistArtByEan() throws Exception {
-		mockMvc.perform(MockMvcRequestBuilders.get(ApiBaseUrl + "/cerca/ean/" + Barcode)
+	@Order(2)
+	public void testGetArticolyByBarcode_KO() throws Exception {
+		final String theBarcode = "8008490002138";
+
+		mockMvc.perform(MockMvcRequestBuilders.get(API_BASE_URL + "/cerca/ean/" + theBarcode)
 				.contentType(MediaType.APPLICATION_JSON)
 				.content(JsonData)
 				.accept(MediaType.APPLICATION_JSON))
 				.andExpect(status().isNotFound())
 				.andExpect(jsonPath("$.codice").value(404))
-				.andExpect(jsonPath("$.messaggio").value("Il barcode " + Barcode + " non è stato trovato!"))
+				.andExpect(jsonPath("$.messaggio").value("Il barcode " + theBarcode + " non è stato trovato!"))
 				.andDo(print());
 	}
 	
 	@Test
-	@Order(2)
-	public void C_listArtByCodArt() throws Exception {
-		mockMvc.perform(MockMvcRequestBuilders.get(ApiBaseUrl + "/cerca/codice/002000301")
+	@Order(3)
+	public void testGetArticolyByCodArt() throws Exception {
+		final String theCodArt = "002000301";
+		
+		mockMvc.perform(MockMvcRequestBuilders.get(API_BASE_URL + "/cerca/codice/" + theCodArt)
 				.accept(MediaType.APPLICATION_JSON))
 				.andExpect(status().isOk())
 				.andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
@@ -148,27 +152,30 @@ private MockMvc mockMvc;
 				.andReturn();
 	}
 	
-	private String CodArt = "002000301b";
 	
 	@Test
-	@Order(3)
-	public void D_ErrlistArtByCodArt() throws Exception {
-		mockMvc.perform(MockMvcRequestBuilders.get(ApiBaseUrl + "/cerca/codice/" + CodArt)
+	@Order(4)
+	public void testArticolyByCodArt_KO() throws Exception {
+		final String theCodArt = "002000301b";
+
+		mockMvc.perform(MockMvcRequestBuilders.get(API_BASE_URL + "/cerca/codice/" + theCodArt)
 				.contentType(MediaType.APPLICATION_JSON)
 				.content(JsonData)
 				.accept(MediaType.APPLICATION_JSON))
 				.andExpect(status().isNotFound())
 				.andExpect(jsonPath("$.codice").value(404))
-				.andExpect(jsonPath("$.messaggio").value("L'articolo con codice " + CodArt + " non è stato trovato!"))
+				.andExpect(jsonPath("$.messaggio").value("L'articolo con codice " + theCodArt + " non è stato trovato!"))
 				.andDo(print());
 	}
 	
 	private String JsonData2 = "[" + JsonData + "]";
 
 	@Test
-	@Order(4)
-	public void E_listArtByDesc() throws Exception {
-		mockMvc.perform(MockMvcRequestBuilders.get(ApiBaseUrl + "/cerca/descrizione/ACQUA ULIVETO 15 LT")
+	@Order(5)
+	public void testGetArticoliByDescrizione() throws Exception {
+		final String theDescrizioneFilter = "ACQUA ULIVETO 15 LT";
+
+		mockMvc.perform(MockMvcRequestBuilders.get(API_BASE_URL + "/cerca/descrizione/" + theDescrizioneFilter)
 				.accept(MediaType.APPLICATION_JSON))
 				.andExpect(status().isOk())
 				.andExpect(jsonPath("$", hasSize(1)))
@@ -178,15 +185,15 @@ private MockMvc mockMvc;
 	}
 	
 	@Test
-	@Order(5)
-	public void G_TestErrlistArtByDesc() throws Exception {
-		String Filter = "123ABC";
+	@Order(6)
+	public void testGetArticoliByDescrizione_KO() throws Exception {
+		final String theDescrizioneFilter = "123ABC";
 		
-		mockMvc.perform(MockMvcRequestBuilders.get(ApiBaseUrl + "/cerca/descrizione/" + Filter)
+		mockMvc.perform(MockMvcRequestBuilders.get(API_BASE_URL + "/cerca/descrizione/" + theDescrizioneFilter)
 				.accept(MediaType.APPLICATION_JSON))
 				.andExpect(status().isNotFound())
 				.andExpect(jsonPath("$.codice").value(404))
-				.andExpect(jsonPath("$.messaggio").value("Non è stato trovato alcun articolo avente descrizione " + Filter))
+				.andExpect(jsonPath("$.messaggio").value("Non è stato trovato alcun articolo avente descrizione " + theDescrizioneFilter))
 				.andReturn();
 	}
 }

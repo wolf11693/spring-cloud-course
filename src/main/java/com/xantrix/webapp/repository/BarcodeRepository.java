@@ -14,10 +14,14 @@ public interface BarcodeRepository extends JpaRepository<Barcode, Barcode> {
 
 	public Barcode findByBarcodeString(String barcodeString);
 
+	// Query native in sql
 	@Query( value = "SELECT "
-				  + "	art.* "
-				  + "FROM Barcode bar "
-				  + "INNER JOIN Articolo art ON art.codice = bar.articolo.codice "
-				  + "WHERE art.codArt := codiceArticolo" )
-	public List<Barcode> findBarCodeByArticle(@Param("codiceArticolo") String codiceArticolo);
+				  + "	* "
+				  + "FROM "
+				  + "	Barcode bar"
+				  + "	INNER JOIN Articolo art ON art.codArt = bar.codArt"
+				  + "WHERE 1=1"
+				  + "	AND bar.codArt = :codiceArticolo", 
+			nativeQuery = true )
+	public List<Barcode> findBarcodeByArticle(@Param("codiceArticolo") String codArticolo);
 }

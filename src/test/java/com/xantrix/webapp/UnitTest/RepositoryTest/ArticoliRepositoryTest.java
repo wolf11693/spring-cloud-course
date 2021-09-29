@@ -1,7 +1,8 @@
 package com.xantrix.webapp.UnitTest.RepositoryTest;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 import java.util.HashSet;
 import java.util.List;
@@ -30,7 +31,7 @@ public class ArticoliRepositoryTest {
 
 	@Test
 	@Order(1)
-	public void A_TestInsArticolo() {
+	public void testInserimentoArticolo() {
 		Articolo articolo = this.createArticolo();
 		this.articoloRepository.save(articolo);
 
@@ -49,6 +50,7 @@ public class ArticoliRepositoryTest {
 		return articolo;
 		
 	}
+	
 	private FamigliaAssortimento createFamigliaAssortimento() {
 		FamigliaAssortimento famigliaAssortimento = new FamigliaAssortimento();
 		famigliaAssortimento.setCodice(1);
@@ -70,25 +72,26 @@ public class ArticoliRepositoryTest {
 	
 	@Test
 	@Order(2)
-	public void B_TestSelByDescrizioneLike() {
+	public void testGetArticoliByDescrizioneLike() {
 		List<Articolo> articoli = this.articoloRepository.findByDescrizioneLike("Articolo di Test");
 		assertEquals(1, articoli.size());
 	}
 
 	@Test
 	@Order(3)
-	public void C_TestfindByBarcodes() throws Exception {
-		assertThat(this.articoloRepository.SelByEan("12345678"))
+	public void testGetArticoloByBarcode() throws Exception {
+		assertThat(this.articoloRepository.findByBarcode("12345678"))
 				.extracting(Articolo::getDescrizione)
 				.isEqualTo("Articolo di Test");
-
 	}
 
 	@Test
 	@Order(4)
-	public void D_TestDelArticolo() {
+	public void testDeleteArticolo() {
 		Articolo articolo = this.articoloRepository.findByCodice("123Test");
 		this.articoloRepository.delete(articolo);
+		assertNull(this.articoloRepository.findByCodice("123Test"));
+		
 	}
 
 }

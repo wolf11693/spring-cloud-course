@@ -9,8 +9,6 @@ import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -22,6 +20,9 @@ import javax.persistence.TemporalType;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
+/**
+ * This class Map Articoli Table
+ * */
 @Entity
 @Table(name = "Articoli")
 public class Articolo implements Serializable {
@@ -30,7 +31,6 @@ public class Articolo implements Serializable {
 
 	@Id
 	@Column(name = "CODART")
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private String codice;
 
 	@Column(name = "DESCRIZIONE")

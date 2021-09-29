@@ -1,6 +1,7 @@
 package com.xantrix.webapp.UnitTest.ControllerTest;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -10,6 +11,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.TestMethodOrder;
+import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
@@ -22,28 +24,28 @@ import org.springframework.web.context.WebApplicationContext;
 
 import com.xantrix.webapp.Application;
 import com.xantrix.webapp.entity.Articolo;
-import com.xantrix.webapp.repository.ArticoliRepository;
+import com.xantrix.webapp.repository.ArticoloRepository;
 
 @ContextConfiguration(classes = Application.class)
 @SpringBootTest
 @TestMethodOrder(OrderAnnotation.class)
-public class InsertArtTest {
+public class InsertArticoloTest {
 	 
     private MockMvc mockMvc;
 	
 	@Autowired
 	private WebApplicationContext webAppCtx;
-	
-	@Autowired
-	private ArticoliRepository articoliRepository;
-	
+		
 	@BeforeEach
-	public void setup() {
+	public void init() {
 		DefaultMockMvcBuilder webAppContextSetup = MockMvcBuilders.webAppContextSetup(webAppCtx);
 		this.mockMvc = webAppContextSetup.build();
 	}
 	
-	private String ApiBaseUrl = "/api/articoli";
+	@Mock
+	private ArticoloRepository articoloRepository;
+	
+	private final String API_BASE_URL = "/api/articoli";
 	
 	String JsonData =  
 			"{\r\n" + 
@@ -75,34 +77,37 @@ public class InsertArtTest {
 	
 	@Test
 	@Order(1)
-	public void A_testInsArticolo() throws Exception {
-		mockMvc.perform(MockMvcRequestBuilders.post(ApiBaseUrl + "/inserisci")
-				.contentType(MediaType.APPLICATION_JSON)
-				.content(JsonData)
-				.accept(MediaType.APPLICATION_JSON))
-				.andExpect(status().isCreated())
-				.andExpect(jsonPath("$.code").value("200 OK"))
-				.andExpect(jsonPath("$.message").value("Inserimento Articolo 123Test Eseguita Con Successo"))
+	public void testInsertArticolo() throws Exception {
+		Articolo articolo = new Articolo();
+		articolo.setCodice("123Test");
+		
+		when(this.articoloRepository.findByCodice("123Test")).thenReturn(articolo);
+		
+		mockMvc.perform(MockMvcRequestBuilders.post(API_BASE_URL + "/inserisci")
+			.contentType(MediaType.APPLICATION_JSON)
+			.content(JsonData)
+			.accept(MediaType.APPLICATION_JSON))
+			.andExpect(status().isCreated())
+			.andExpect(jsonPath("$.code").value("200 OK"))
+			.andExpect(jsonPath("$.message").value("Inserimento Articolo 123Test Eseguita Con Successo"))
+			.andDo( print() );
 
-				.andDo(print());
-
-				assertThat(this.articoliRepository.findByCodArt("123Test"))
-				.extracting(Articolo::getCodArt)
-				.isEqualTo("123Test");
+				assertThat(this.articoloRepository.findByCodice("123Test"))
+					.extracting(Articolo::getCodice)
+					.isEqualTo("123Test");
 	}
 	
 	@Test
 	@Order(2)
-	public void B_testErrInsArticolo() throws Exception
-	{
-		mockMvc.perform(MockMvcRequestBuilders.post(ApiBaseUrl + "/inserisci")
-				.contentType(MediaType.APPLICATION_JSON)
-				.content(JsonData)
-				.accept(MediaType.APPLICATION_JSON))
-				.andExpect(status().isNotAcceptable())
-				.andExpect(jsonPath("$.codice").value(406))
-				.andExpect(jsonPath("$.messaggio").value("Articolo 123Test presente in anagrafica! Impossibile utilizzare il metodo POST"))
-				.andDo(print());
+	public void testInsertArticolo_KO_406() throws Exception {
+		mockMvc.perform(MockMvcRequestBuilders.post(API_BASE_URL + "/inserisci")
+			.contentType(MediaType.APPLICATION_JSON)
+			.content(JsonData)
+			.accept(MediaType.APPLICATION_JSON))
+			.andExpect(status().isNotAcceptable())
+			.andExpect(jsonPath("$.codice").value(406))
+			.andExpect(jsonPath("$.messaggio").value("Articolo 123Test presente in anagrafica! Impossibile utilizzare il metodo POST"))
+			.andDo(print());
 	}
 	
 	String ErrJsonData =  
@@ -135,15 +140,15 @@ public class InsertArtTest {
 	
 	@Test
 	@Order(3)
-	public void C_testErrInsArticolo() throws Exception {
-		mockMvc.perform(MockMvcRequestBuilders.post(ApiBaseUrl + "/inserisci")
-				.contentType(MediaType.APPLICATION_JSON)
-				.content(ErrJsonData)
-				.accept(MediaType.APPLICATION_JSON))
-				.andExpect(status().isBadRequest())
-				.andExpect(jsonPath("$.codice").value(400))
-				.andExpect(jsonPath("$.messaggio").value("Il campo Descrizione deve avere un numero di caratteri compreso tra 6 e 80"))
-				.andDo(print());
+	public void testInsertArticolo_KO_400() throws Exception {
+		mockMvc.perform(MockMvcRequestBuilders.post(API_BASE_URL + "/inserisci")
+			.contentType(MediaType.APPLICATION_JSON)
+			.content(ErrJsonData)
+			.accept(MediaType.APPLICATION_JSON))
+			.andExpect(status().isBadRequest())
+			.andExpect(jsonPath("$.codice").value(400))
+			.andExpect(jsonPath("$.messaggio").value("Il campo Descrizione deve avere un numero di caratteri compreso tra 6 e 80"))
+			.andDo(print());
 	}
 	
 	String JsonDataMod =  
@@ -176,9 +181,13 @@ public class InsertArtTest {
 	
 	@Test
 	@Order(4)
-	public void D_testUpdArticolo() throws Exception {
-				
-		mockMvc.perform(MockMvcRequestBuilders.put(ApiBaseUrl + "/modifica")
+	public void testUpdateArticolo() throws Exception {
+		Articolo articolo = new Articolo();
+		articolo.setIdStatoArticolo("2");
+		
+		when(this.articoloRepository.findByCodice("123Test")).thenReturn(articolo);
+		
+		mockMvc.perform(MockMvcRequestBuilders.put(API_BASE_URL + "/modifica")
 				.contentType(MediaType.APPLICATION_JSON)
 				.content(JsonDataMod)
 				.accept(MediaType.APPLICATION_JSON))
@@ -187,9 +196,9 @@ public class InsertArtTest {
 				.andExpect(jsonPath("$.message").value("Modifica Articolo 123Test Eseguita Con Successo"))
 				.andDo(print());
 		
-		assertThat(this.articoliRepository.findByCodArt("123Test"))
-		.extracting(Articolo::getIdStatoArt)
-		.isEqualTo("2");
+		assertThat(this.articoloRepository.findByCodice("123Test"))
+			.extracting(Articolo::getIdStatoArticolo)
+			.isEqualTo("2");
 		
 	}
 	
@@ -223,39 +232,38 @@ public class InsertArtTest {
 	
 	@Test
 	@Order(5)
-	public void E_testErrUpdArticolo() throws Exception {
-		mockMvc.perform(MockMvcRequestBuilders.put(ApiBaseUrl + "/modifica")
-				.contentType(MediaType.APPLICATION_JSON)
-				.content(ErrJsonDataMod)
-				.accept(MediaType.APPLICATION_JSON))
-				.andExpect(status().isNotFound())
-				.andExpect(jsonPath("$.codice").value(404))
-				.andExpect(jsonPath("$.messaggio").value("Articolo pippo123 non presente in anagrafica! Impossibile utilizzare il metodo PUT"))
-				.andDo(print());
+	public void testUpdateArticolo_KO_404() throws Exception {
+		mockMvc.perform(MockMvcRequestBuilders.put(API_BASE_URL + "/modifica")
+			.contentType(MediaType.APPLICATION_JSON)
+			.content(ErrJsonDataMod)
+			.accept(MediaType.APPLICATION_JSON))
+			.andExpect(status().isNotFound())
+			.andExpect(jsonPath("$.codice").value(404))
+			.andExpect(jsonPath("$.messaggio").value("Articolo pippo123 non presente in anagrafica! Impossibile utilizzare il metodo PUT"))
+			.andDo( print() );
 	}
 	
 	@Test
 	@Order(6)
-	public void F_testDelArticolo() throws Exception {
-		mockMvc.perform(MockMvcRequestBuilders.delete(ApiBaseUrl + "/elimina/123Test")
-				.accept(MediaType.APPLICATION_JSON))
-				.andExpect(status().isOk())
-				.andExpect(jsonPath("$.code").value("200 OK"))
-				.andExpect(jsonPath("$.message").value("Eliminazione Articolo 123Test Eseguita Con Successo"))
-				.andDo(print());
+	public void testDeleteArticolo() throws Exception {
+		mockMvc.perform(MockMvcRequestBuilders.delete(API_BASE_URL + "/elimina/123Test")
+			.accept(MediaType.APPLICATION_JSON))
+			.andExpect(status().isOk())
+			.andExpect(jsonPath("$.code").value("200 OK"))
+			.andExpect(jsonPath("$.message").value("Eliminazione Articolo 123Test Eseguita Con Successo"))
+			.andDo( print() );
 	}
 	
 	@Test
 	@Order(7)
-	public void G_testErrDelArticolo() throws Exception {
-		mockMvc.perform(MockMvcRequestBuilders.delete(ApiBaseUrl + "/elimina/123Test")
-				.contentType(MediaType.APPLICATION_JSON)
-				.content(ErrJsonDataMod)
-				.accept(MediaType.APPLICATION_JSON))
-				.andExpect(status().isNotFound())
-				.andExpect(jsonPath("$.codice").value(404))
-				.andExpect(jsonPath("$.messaggio").value("Articolo 123Test non presente in anagrafica!"))
-				.andDo(print());
+	public void testDeleteArticolo_KO_404() throws Exception {
+		mockMvc.perform(MockMvcRequestBuilders.delete(API_BASE_URL + "/elimina/123Test")
+			.contentType(MediaType.APPLICATION_JSON)
+			.content(ErrJsonDataMod)
+			.accept(MediaType.APPLICATION_JSON))
+			.andExpect(status().isNotFound())
+			.andExpect(jsonPath("$.codice").value(404))
+			.andExpect(jsonPath("$.messaggio").value("Articolo 123Test non presente in anagrafica!"))
+			.andDo( print() );
 	}
-	
 }
