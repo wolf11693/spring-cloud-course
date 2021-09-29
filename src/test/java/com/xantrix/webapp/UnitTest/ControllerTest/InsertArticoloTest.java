@@ -25,6 +25,7 @@ import org.springframework.web.context.WebApplicationContext;
 import com.xantrix.webapp.Application;
 import com.xantrix.webapp.entity.Articolo;
 import com.xantrix.webapp.repository.ArticoloRepository;
+import com.xantrix.webapp.service.ArticoloService;
 
 @ContextConfiguration(classes = Application.class)
 @SpringBootTest
@@ -32,7 +33,10 @@ import com.xantrix.webapp.repository.ArticoloRepository;
 public class InsertArticoloTest {
 	 
     private MockMvc mockMvc;
-	
+
+    @Mock
+	private ArticoloService articoloService;
+    
 	@Autowired
 	private WebApplicationContext webAppCtx;
 		
@@ -41,9 +45,6 @@ public class InsertArticoloTest {
 		DefaultMockMvcBuilder webAppContextSetup = MockMvcBuilders.webAppContextSetup(webAppCtx);
 		this.mockMvc = webAppContextSetup.build();
 	}
-	
-	@Mock
-	private ArticoloRepository articoloRepository;
 	
 	private final String API_BASE_URL = "/api/articoli";
 	
@@ -81,7 +82,7 @@ public class InsertArticoloTest {
 		Articolo articolo = new Articolo();
 		articolo.setCodice("123Test");
 		
-		when(this.articoloRepository.findByCodice("123Test")).thenReturn(articolo);
+		when(this.articoloService.getByCodice("123Test")).thenReturn(articolo);
 		
 		mockMvc.perform(MockMvcRequestBuilders.post(API_BASE_URL + "/inserisci")
 			.contentType(MediaType.APPLICATION_JSON)
@@ -92,7 +93,7 @@ public class InsertArticoloTest {
 			.andExpect(jsonPath("$.message").value("Inserimento Articolo 123Test Eseguita Con Successo"))
 			.andDo( print() );
 
-				assertThat(this.articoloRepository.findByCodice("123Test"))
+				assertThat(this.articoloService.getByCodice("123Test"))
 					.extracting(Articolo::getCodice)
 					.isEqualTo("123Test");
 	}
@@ -185,7 +186,7 @@ public class InsertArticoloTest {
 		Articolo articolo = new Articolo();
 		articolo.setIdStatoArticolo("2");
 		
-		when(this.articoloRepository.findByCodice("123Test")).thenReturn(articolo);
+		when(this.articoloService.getByCodice("123Test")).thenReturn(articolo);
 		
 		mockMvc.perform(MockMvcRequestBuilders.put(API_BASE_URL + "/modifica")
 				.contentType(MediaType.APPLICATION_JSON)
@@ -196,7 +197,7 @@ public class InsertArticoloTest {
 				.andExpect(jsonPath("$.message").value("Modifica Articolo 123Test Eseguita Con Successo"))
 				.andDo(print());
 		
-		assertThat(this.articoloRepository.findByCodice("123Test"))
+		assertThat(this.articoloService.getByCodice("123Test"))
 			.extracting(Articolo::getIdStatoArticolo)
 			.isEqualTo("2");
 		

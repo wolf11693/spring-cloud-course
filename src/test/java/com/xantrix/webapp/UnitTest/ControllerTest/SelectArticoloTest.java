@@ -27,9 +27,8 @@ import com.xantrix.webapp.Application;
 @ContextConfiguration(classes = Application.class)
 @SpringBootTest
 @TestMethodOrder(OrderAnnotation.class)
-public class SelectArticoloTest
-{
-private MockMvc mockMvc;
+public class SelectArticoloTest {
+	private MockMvc mockMvc;
 	
 	@Autowired
 	private WebApplicationContext webAppCtx;
