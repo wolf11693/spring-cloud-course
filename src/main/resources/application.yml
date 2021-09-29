@@ -7,7 +7,8 @@ server:
 
 spring:
   application:
-    name: ProductsWebService
+    name: ArticoliWebService
+    
 # ==============================================================
 # = DBMS PostgreSQL Parameters
 # ==============================================================
@@ -15,7 +16,7 @@ spring:
     initialization-mode: always
     password: 123_Stella
     platform: postgres
-    url: jdbc:postgresql://localhost:5433/AlphaShop
+    url: jdbc:postgresql://localhost:5433/Alphashop
     username: postgres
   jpa:
     hibernate:
@@ -27,7 +28,3 @@ spring:
           lob:
             non_contextual_creation: true
     show-sql: true
-    
-
-  
-
