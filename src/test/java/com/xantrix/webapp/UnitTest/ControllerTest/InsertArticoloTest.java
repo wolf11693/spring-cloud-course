@@ -6,10 +6,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import org.junit.Test;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
 import org.junit.jupiter.api.Order;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,8 +24,8 @@ import org.springframework.web.context.WebApplicationContext;
 
 import com.xantrix.webapp.Application;
 import com.xantrix.webapp.entity.Articolo;
-import com.xantrix.webapp.repository.ArticoloRepository;
 import com.xantrix.webapp.service.ArticoloService;
+
 
 @ContextConfiguration(classes = Application.class)
 @SpringBootTest

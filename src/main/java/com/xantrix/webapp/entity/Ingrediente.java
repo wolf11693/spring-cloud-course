@@ -5,27 +5,28 @@ import java.io.Serializable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
+import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
-@Table(name = "INGREDIENTE")
+@Table(name = "INGREDIENTI")
 public class Ingrediente implements Serializable {
 
 	private static final long serialVersionUID = 7763298881475779569L;
 
+	
 	@Id
-	@Column(name = "IDINGREDIENTE")
+	@Column(name = "CODART")
 	private String codice;
 
 	@Column(name = "INFO")
 	private String info;
 
 	@OneToOne
-	@JoinColumn(name = "CODART")
+	@PrimaryKeyJoinColumn
 	@JsonIgnore
 	// [INGREDIENTE] --(1,1)-------<==>-------(1,1)-- [ARTICOLO]
 	private Articolo articolo;

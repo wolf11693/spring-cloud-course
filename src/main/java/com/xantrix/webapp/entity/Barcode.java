@@ -12,7 +12,7 @@ import javax.persistence.Table;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
 @Entity
-@Table(name = "BarCode")
+@Table(name = "BARCODE")
 public class Barcode implements Serializable {
 
 	private static final long serialVersionUID = 7763298881475779569L;
@@ -22,7 +22,7 @@ public class Barcode implements Serializable {
 	private String barcodeString;
 
 	@Column(name = "IDTIPOART")
-	private Integer idTipoArticolo;
+	private String idTipoArticolo;
 
 	@ManyToOne
 	@JoinColumn(name = "CODART")
@@ -46,11 +46,11 @@ public class Barcode implements Serializable {
 		this.articolo = articolo;
 	}
 
-	public Integer getIdTipoArticolo() {
+	public String getIdTipoArticolo() {
 		return idTipoArticolo;
 	}
 
-	public void setIdTipoArticolo(Integer idTipoArticolo) {
+	public void setIdTipoArticolo(String idTipoArticolo) {
 		this.idTipoArticolo = idTipoArticolo;
 	}
 

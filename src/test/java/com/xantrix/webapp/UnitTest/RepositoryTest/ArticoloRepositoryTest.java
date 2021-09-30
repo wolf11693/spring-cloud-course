@@ -22,10 +22,10 @@ import com.xantrix.webapp.entity.Barcode;
 import com.xantrix.webapp.entity.FamigliaAssortimento;
 import com.xantrix.webapp.repository.ArticoloRepository;
 
-@SpringBootTest()
+@SpringBootTest
 @ContextConfiguration(classes = Application.class)
 @TestMethodOrder(OrderAnnotation.class)
-public class ArticoliRepositoryTest {
+public class ArticoloRepositoryTest {
 	@Autowired
 	private ArticoloRepository articoloRepository;
 
@@ -59,14 +59,14 @@ public class ArticoliRepositoryTest {
 	}
 	
 	private Set<Barcode> createBarcodesByArticolo(final Articolo articolo) {
-		Set<Barcode> barCodes = new HashSet<>();
+		Set<Barcode> barcodes = new HashSet<>();
 		Barcode barcode = new Barcode();
+		barcode.setBarcodeString("121312");
+		barcode.setIdTipoArticolo("CP");
 		barcode.setArticolo(articolo);
-		barcode.setBarcodeString("CP");
-		barcode.setIdTipoArticolo(121312);
-		barCodes.add(barcode);
+		barcodes.add(barcode);
 		
-		return barCodes;
+		return barcodes;
 
 	}
 	
@@ -80,7 +80,7 @@ public class ArticoliRepositoryTest {
 	@Test
 	@Order(3)
 	public void testGetArticoloByBarcode() throws Exception {
-		assertThat(this.articoloRepository.findByBarcode("12345678"))
+		assertThat(this.articoloRepository.findByBarcode("121312"))
 				.extracting(Articolo::getDescrizione)
 				.isEqualTo("Articolo di Test");
 	}
@@ -91,7 +91,6 @@ public class ArticoliRepositoryTest {
 		Articolo articolo = this.articoloRepository.findByCodice("123Test");
 		this.articoloRepository.delete(articolo);
 		assertNull(this.articoloRepository.findByCodice("123Test"));
-		
 	}
 
 }
