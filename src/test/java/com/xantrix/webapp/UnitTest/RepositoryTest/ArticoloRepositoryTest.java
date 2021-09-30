@@ -32,7 +32,7 @@ public class ArticoloRepositoryTest {
 	@Test
 	@Order(1)
 	public void testInserimentoArticolo() {
-		Articolo articolo = this.createArticolo();
+		Articolo articolo = this.createArticoloMock();
 		this.articoloRepository.save(articolo);
 
 		assertThat(this.articoloRepository.findByCodice("123Test"))
@@ -40,7 +40,7 @@ public class ArticoloRepositoryTest {
 			.isEqualTo("Articolo di Test");
 	}
 
-	private Articolo createArticolo() {
+	private Articolo createArticoloMock() {
 		Articolo articolo = new Articolo();
 		articolo.setCodice("123Test");
 		articolo.setDescrizione("Articolo di Test");
