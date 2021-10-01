@@ -28,7 +28,7 @@ public class FamigliaAssortimento implements Serializable {
 
 	@OneToMany(mappedBy = "famigliaAssortimento", fetch = FetchType.LAZY)
 	@JsonBackReference
-	// [FAMIGLIA_ASSORTIMENTO] --(1,1)-------<==>-------(1,N)-- [ARTICOLO]
+	// [FAMIGLIA_ASSORTIMENTO] --(1,N)-------<==>-------(1,1)-- [ARTICOLO]
 	private List<Articolo> articoli = new ArrayList<>();
 
 	public Integer getCodice() {

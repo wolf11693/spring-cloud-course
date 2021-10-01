@@ -26,7 +26,6 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 @Entity
 @Table(name = "Articoli")
 public class Articolo implements Serializable {
-
 	private static final long serialVersionUID = 7763298881475779569L;
 
 	@Id
@@ -80,96 +79,108 @@ public class Articolo implements Serializable {
 		return codice;
 	}
 
-	public void setCodice(String codice) {
+	public Articolo setCodice(String codice) {
 		this.codice = codice;
+		return this;
 	}
 
 	public String getDescrizione() {
 		return descrizione;
 	}
 
-	public void setDescrizione(String descrizione) {
+	public Articolo setDescrizione(String descrizione) {
 		this.descrizione = descrizione;
+		return this;
 	}
 
 	public Integer getUm() {
 		return um;
 	}
 
-	public void setUm(Integer um) {
+	public Articolo setUm(Integer um) {
 		this.um = um;
+		return this;
 	}
 
 	public String getCodiceStatistico() {
 		return codiceStatistico;
 	}
 
-	public void setCodiceStatistico(String codiceStatistico) {
+	public Articolo setCodiceStatistico(String codiceStatistico) {
 		this.codiceStatistico = codiceStatistico;
+		return this;
 	}
 
 	public Integer getPzCart() {
 		return pzCart;
 	}
 
-	public void setPzCart(Integer pzCart) {
+	public Articolo setPzCart(Integer pzCart) {
 		this.pzCart = pzCart;
+		return this;
 	}
 
 	public Double getPesoNetto() {
 		return pesoNetto;
 	}
 
-	public void setPesoNetto(Double pesoNetto) {
+	public Articolo setPesoNetto(Double pesoNetto) {
 		this.pesoNetto = pesoNetto;
+		return this;
 	}
 
 	public String getIdStatoArticolo() {
 		return idStatoArticolo;
 	}
 
-	public void setIdStatoArticolo(String idStatoArticolo) {
+	public Articolo setIdStatoArticolo(String idStatoArticolo) {
 		this.idStatoArticolo = idStatoArticolo;
+		return this;
 	}
 
 	public Date getDataCreazione() {
 		return dataCreazione;
 	}
 
-	public void setDataCreazione(Date dataCreazione) {
+	public Articolo setDataCreazione(Date dataCreazione) {
 		this.dataCreazione = dataCreazione;
+		return this;
 	}
 
 	public FamigliaAssortimento getFamigliaAssortimento() {
 		return famigliaAssortimento;
 	}
 
-	public void setFamigliaAssortimento(FamigliaAssortimento famigliaAssortimento) {
+	public Articolo setFamigliaAssortimento(FamigliaAssortimento famigliaAssortimento) {
 		this.famigliaAssortimento = famigliaAssortimento;
+		return this;
 	}
 
 	public Set<Barcode> getBarcodes() {
 		return barcodes;
 	}
 
-	public void setBarcodes(Set<Barcode> barcodes) {
+	public Articolo setBarcodes(Set<Barcode> barcodes) {
 		this.barcodes = barcodes;
+		return this;
 	}
 
 	public Ingrediente getIngrediente() {
 		return ingrediente;
 	}
 
-	public void setIngrediente(Ingrediente ingrediente) {
+	public Articolo setIngrediente(Ingrediente ingrediente) {
 		this.ingrediente = ingrediente;
+		return this;
 	}
 
 	public Iva getIva() {
 		return iva;
 	}
 
-	public void setIva(Iva iva) {
+	public Articolo setIva(Iva iva) {
 		this.iva = iva;
+		return this;
 	}
 
 	@Override
