@@ -12,7 +12,7 @@ import com.xantrix.webapp.entity.FamigliaAssortimento;
 import com.xantrix.webapp.entity.Ingrediente;
 import com.xantrix.webapp.entity.Iva;
 
-@JsonRootName(value = "Articolo")
+@JsonRootName(value = "articolo")
 public class ArticoloResource implements Serializable, Resource {
 	private static final long serialVersionUID = -5794820242221303814L;
 
@@ -23,7 +23,7 @@ public class ArticoloResource implements Serializable, Resource {
 	private String descrizione;
 
 	@JsonProperty(value = "um")
-	private Integer um;
+	private String um;
 
 	@JsonProperty(value = "codiceStatisticoArticolo")
 	private String codiceStatistico;
@@ -56,96 +56,108 @@ public class ArticoloResource implements Serializable, Resource {
 		return codice;
 	}
 
-	public void setCodice(String codice) {
+	public ArticoloResource setCodice(String codice) {
 		this.codice = codice;
+		return this;
 	}
 
 	public String getDescrizione() {
 		return descrizione;
 	}
 
-	public void setDescrizione(String descrizione) {
+	public ArticoloResource setDescrizione(String descrizione) {
 		this.descrizione = descrizione;
+		return this;
 	}
 
-	public Integer getUm() {
+	public String getUm() {
 		return um;
 	}
 
-	public void setUm(Integer um) {
+	public ArticoloResource setUm(String um) {
 		this.um = um;
+		return this;
 	}
 
 	public String getCodiceStatistico() {
 		return codiceStatistico;
 	}
 
-	public void setCodiceStatistico(String codiceStatistico) {
+	public ArticoloResource setCodiceStatistico(String codiceStatistico) {
 		this.codiceStatistico = codiceStatistico;
+		return this;
 	}
 
 	public Integer getPzCart() {
 		return pzCart;
 	}
 
-	public void setPzCart(Integer pzCart) {
+	public ArticoloResource setPzCart(Integer pzCart) {
 		this.pzCart = pzCart;
+		return this;
 	}
 
 	public Double getPesoNetto() {
 		return pesoNetto;
 	}
 
-	public void setPesoNetto(Double pesoNetto) {
+	public ArticoloResource setPesoNetto(Double pesoNetto) {
 		this.pesoNetto = pesoNetto;
+		return this;
 	}
 
 	public String getIdStatoArticolo() {
 		return idStatoArticolo;
 	}
 
-	public void setIdStatoArticolo(String idStatoArticolo) {
+	public ArticoloResource setIdStatoArticolo(String idStatoArticolo) {
 		this.idStatoArticolo = idStatoArticolo;
+		return this;
 	}
 
 	public Date getDataCreazione() {
 		return dataCreazione;
 	}
 
-	public void setDataCreazione(Date dataCreazione) {
+	public ArticoloResource setDataCreazione(Date dataCreazione) {
 		this.dataCreazione = dataCreazione;
+		return this;
 	}
 
 	public Iva getIva() {
 		return iva;
 	}
 
-	public void setIva(Iva iva) {
+	public ArticoloResource setIva(Iva iva) {
 		this.iva = iva;
+		return this;
 	}
 
 	public Ingrediente getIngrediente() {
 		return ingrediente;
 	}
 
-	public void setIngrediente(Ingrediente ingrediente) {
+	public ArticoloResource setIngrediente(Ingrediente ingrediente) {
 		this.ingrediente = ingrediente;
+		return this;
 	}
 
 	public Set<Barcode> getBarcodes() {
 		return barcodes;
 	}
 
-	public void setBarcodes(Set<Barcode> barcodes) {
+	public ArticoloResource setBarcodes(Set<Barcode> barcodes) {
 		this.barcodes = barcodes;
+		return this;
 	}
 
 	public FamigliaAssortimento getFamigliaAssortimento() {
 		return famigliaAssortimento;
 	}
 
-	public void setFamigliaAssortimento(FamigliaAssortimento famigliaAssortimento) {
+	public ArticoloResource setFamigliaAssortimento(FamigliaAssortimento famigliaAssortimento) {
 		this.famigliaAssortimento = famigliaAssortimento;
+		return this;
 	}
 
 	@Override

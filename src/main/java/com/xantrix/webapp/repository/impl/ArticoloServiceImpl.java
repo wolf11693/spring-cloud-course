@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.xantrix.webapp.entity.Articolo;
@@ -14,7 +15,17 @@ import com.xantrix.webapp.service.ArticoloService;
 public class ArticoloServiceImpl implements ArticoloService {
 	private final Logger LOG = LoggerFactory.getLogger(ArticoloServiceImpl.class);
 	
+	@Autowired
 	private ArticoloRepository articoloRepository;
+	
+	@Override
+	public List<Articolo> getAll(){
+		LOG.info("** getAll - START **");
+		List<Articolo> articoli = this.articoloRepository.findAll();
+		LOG.info("** getAll - END **");
+
+		return articoli;
+	}
 	
 	@Override
 	public Articolo getByCodice(String theCodiceArticolo) {

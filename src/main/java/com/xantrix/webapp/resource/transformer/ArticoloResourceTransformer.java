@@ -16,18 +16,19 @@ public class ArticoloResourceTransformer implements ResourceTransfromer<Articolo
 	private ArticoloResource mapObjModelToResource(Articolo artModel) {
 		ArticoloResource artResource = new ArticoloResource();
 
-		artResource.setCodice(artModel.getCodice());
-		artResource.setDescrizione(artModel.getDescrizione());
-		artResource.setUm(artModel.getUm());
-		artResource.setCodiceStatistico(artModel.getCodiceStatistico());
-		artResource.setPzCart(artModel.getPzCart());
-		artResource.setPesoNetto(artModel.getPesoNetto());
-		artResource.setIdStatoArticolo(artModel.getIdStatoArticolo());
-		artResource.setDataCreazione(artModel.getDataCreazione());
-		artResource.setIva(artModel.getIva());
-		artResource.setIngrediente(artModel.getIngrediente());
-		artResource.setBarcodes(artModel.getBarcodes());
-		artResource.setFamigliaAssortimento(artModel.getFamigliaAssortimento());
+		artResource
+			.setCodice(artModel.getCodice())
+			.setDescrizione(artModel.getDescrizione())
+			.setUm(artModel.getUm())
+			.setCodiceStatistico(artModel.getCodiceStatistico())
+			.setPzCart(artModel.getPzCart())
+			.setPesoNetto(artModel.getPesoNetto())
+			.setIdStatoArticolo(artModel.getIdStatoArticolo())
+			.setDataCreazione(artModel.getDataCreazione())
+			.setIva(artModel.getIva())
+			.setIngrediente(artModel.getIngrediente())
+			.setBarcodes(artModel.getBarcodes())
+			.setFamigliaAssortimento(artModel.getFamigliaAssortimento());
 
 		return artResource;
 	}

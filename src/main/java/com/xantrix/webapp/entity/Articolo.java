@@ -36,7 +36,7 @@ public class Articolo implements Serializable {
 	private String descrizione;
 
 	@Column(name = "UM")
-	private Integer um;
+	private String um;
 
 	@Column(name = "CODSTAT")
 	private String codiceStatistico;
@@ -93,11 +93,11 @@ public class Articolo implements Serializable {
 		return this;
 	}
 
-	public Integer getUm() {
+	public String getUm() {
 		return um;
 	}
 
-	public Articolo setUm(Integer um) {
+	public Articolo setUm(String um) {
 		this.um = um;
 		return this;
 	}
