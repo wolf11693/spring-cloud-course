@@ -1,4 +1,4 @@
-package com.xantrix.webapp.repository.impl;
+package com.xantrix.webapp.service.impl;
 
 import java.util.List;
 
