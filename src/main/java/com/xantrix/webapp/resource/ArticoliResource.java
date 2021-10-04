@@ -13,17 +13,20 @@ public class ArticoliResource implements Serializable, Resource {
 	@JsonProperty(value = "articoli")
 	List<Articolo> articoli = new ArrayList<>();
 
+	public ArticoliResource(List<Articolo> articoli) {
+		this.articoli = articoli;
+	}
+
 	public List<Articolo> getArticoli() {
 		return articoli;
 	}
 
-	public ArticoliResource(List<Articolo> articoli) {
+	public void setArticoli(List<Articolo> articoli) {
 		this.articoli = articoli;
 	}
-	
-	public ArticoliResource setArticoli(List<Articolo> articoli) {
-		this.articoli = articoli;
-		return this;
+
+	public void setArticoliResource(List<Articolo> articoliResource) {
+		this.articoli = articoliResource;
 	}
 
 	@Override

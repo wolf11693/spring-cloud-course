@@ -27,10 +27,11 @@ public class ArticoloController {
 	
 	@Autowired
 	private ArticoloService articoloService;
+	
 	@Autowired
-	private ArticoloResourceTransformer artResTransf;
+	private ArticoloResourceTransformer articoloResTransf;
 	@Autowired
-	private ArticoliResourceTransformer artsResTransf;
+	private ArticoliResourceTransformer articoliResTransf;
 	
 	
 	@GetMapping(path = "/all")
@@ -38,7 +39,7 @@ public class ArticoloController {
 		LOG.info("** GET api/articolo/all - getArticoli - barcode={} - START **");
 		
 		List<Articolo> articoliFetched = this.articoloService.getAll();
-		ArticoliResource articoliResource = this.artsResTransf.getResourceByModel(articoliFetched);
+		ArticoliResource articoliResource = this.articoliResTransf.getResourceByModel(articoliFetched);
 		ResponseBody<ArticoliResource> responseBody = new ResponseBody<>(articoliResource);
 		
 		LOG.info("** GET api/articolo/all - getArticoli - END **");
@@ -51,7 +52,7 @@ public class ArticoloController {
 		LOG.info("** GET api/articolo/{} - getArticoloByCodice - codiceArticolo={} - START **", codiceArticolo, codiceArticolo);
 		
 		Articolo articoloFetched = this.articoloService.getByCodice(codiceArticolo);
-		ArticoloResource articoloResource = artResTransf.getResourceByModel(articoloFetched);
+		ArticoloResource articoloResource = articoloResTransf.getResourceByModel(articoloFetched);
 		ResponseBody<ArticoloResource> responseBody = new ResponseBody<>(articoloResource);
 		
 		LOG.info("** GET api/articolo/{} - getArticoloByCodice - END **", codiceArticolo);
@@ -64,7 +65,7 @@ public class ArticoloController {
 		LOG.info("** GET api/articolo/barcode/{} - getArticoloByBarcode - barcode={} - START **", barcodeValue, barcodeValue);
 		
 		Articolo articoloFetched = this.articoloService.getByBarcode(barcodeValue);
-		ArticoloResource articoloResource = artResTransf.getResourceByModel(articoloFetched);
+		ArticoloResource articoloResource = articoloResTransf.getResourceByModel(articoloFetched);
 		ResponseBody<ArticoloResource> responseBody = new ResponseBody<>(articoloResource);
 		
 		LOG.info("** GET api/articolo/barcode/{} - getArticoloByCodice - END **", barcodeValue);
