@@ -14,7 +14,7 @@ public interface ArticoloRepository extends JpaRepository<Articolo, String> {
 
 	public Articolo findByCodice(String codice);
 	
-	public List<Articolo> findByDescrizioneLike(String descrizione);
+	public List<Articolo> findByDescrizioneLike(String descrizioneFilter);
 	
 	// Query JPQL
 	@Query("SELECT art FROM Articolo art JOIN art.barcodes bar WHERE bar.barcodeString IN (:bCode)")

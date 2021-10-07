@@ -37,9 +37,9 @@ public class ArticoloServiceImpl implements ArticoloService {
 	}
 
 	@Override
-	public List<Articolo> getByDescrizioneLike(String theDescrzioneFilter) {
-		LOG.info("** getByDescrizioneLike - START - theDescrzioneFilter={} **", theDescrzioneFilter);
-		List<Articolo> articoli = this.articoloRepository.findByDescrizioneLike(theDescrzioneFilter);
+	public List<Articolo> getByDescrizioneLike(String theDescrizioneFilter) {
+		LOG.info("** getByDescrizioneLike - START - theDescrzioneFilter={} **", theDescrizioneFilter);
+		List<Articolo> articoli = this.articoloRepository.findByDescrizioneLike(theDescrizioneFilter);
 		LOG.info("** getByDescrizioneLike - END **");
 	
 		return articoli;

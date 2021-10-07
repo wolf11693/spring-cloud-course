@@ -46,8 +46,6 @@ public class InsertArticoloTest {
 		this.mockMvc = webAppContextSetup.build();
 	}
 	
-	private final String API_BASE_URL = "/api/articoli";
-	
 	String JsonData =  
 			"{\r\n" + 
 			"    \"codArt\": \"123Test\",\r\n" + 
@@ -84,7 +82,7 @@ public class InsertArticoloTest {
 		
 		when(this.articoloService.getByCodice("123Test")).thenReturn(articolo);
 		
-		mockMvc.perform(MockMvcRequestBuilders.post(API_BASE_URL + "/inserisci")
+		mockMvc.perform(MockMvcRequestBuilders.post("api/articolo")
 			.contentType(MediaType.APPLICATION_JSON)
 			.content(JsonData)
 			.accept(MediaType.APPLICATION_JSON))
@@ -101,7 +99,7 @@ public class InsertArticoloTest {
 	@Test
 	@Order(2)
 	public void testInsertArticolo_KO_406() throws Exception {
-		mockMvc.perform(MockMvcRequestBuilders.post(API_BASE_URL + "/inserisci")
+		mockMvc.perform(MockMvcRequestBuilders.post("api/articolo")
 			.contentType(MediaType.APPLICATION_JSON)
 			.content(JsonData)
 			.accept(MediaType.APPLICATION_JSON))
@@ -142,7 +140,7 @@ public class InsertArticoloTest {
 	@Test
 	@Order(3)
 	public void testInsertArticolo_KO_400() throws Exception {
-		mockMvc.perform(MockMvcRequestBuilders.post(API_BASE_URL + "/inserisci")
+		mockMvc.perform(MockMvcRequestBuilders.post("api/articolo")
 			.contentType(MediaType.APPLICATION_JSON)
 			.content(ErrJsonData)
 			.accept(MediaType.APPLICATION_JSON))
@@ -188,7 +186,7 @@ public class InsertArticoloTest {
 		
 		when(this.articoloService.getByCodice("123Test")).thenReturn(articolo);
 		
-		mockMvc.perform(MockMvcRequestBuilders.put(API_BASE_URL + "/modifica")
+		mockMvc.perform(MockMvcRequestBuilders.put("api/articolo")
 				.contentType(MediaType.APPLICATION_JSON)
 				.content(JsonDataMod)
 				.accept(MediaType.APPLICATION_JSON))
@@ -234,7 +232,7 @@ public class InsertArticoloTest {
 	@Test
 	@Order(5)
 	public void testUpdateArticolo_KO_404() throws Exception {
-		mockMvc.perform(MockMvcRequestBuilders.put(API_BASE_URL + "/modifica")
+		mockMvc.perform(MockMvcRequestBuilders.put("api/articolo")
 			.contentType(MediaType.APPLICATION_JSON)
 			.content(ErrJsonDataMod)
 			.accept(MediaType.APPLICATION_JSON))
@@ -247,7 +245,7 @@ public class InsertArticoloTest {
 	@Test
 	@Order(6)
 	public void testDeleteArticolo() throws Exception {
-		mockMvc.perform(MockMvcRequestBuilders.delete(API_BASE_URL + "/elimina/123Test")
+		mockMvc.perform(MockMvcRequestBuilders.delete("api/articolo")
 			.accept(MediaType.APPLICATION_JSON))
 			.andExpect(status().isOk())
 			.andExpect(jsonPath("$.code").value("200 OK"))
@@ -258,7 +256,7 @@ public class InsertArticoloTest {
 	@Test
 	@Order(7)
 	public void testDeleteArticolo_KO_404() throws Exception {
-		mockMvc.perform(MockMvcRequestBuilders.delete(API_BASE_URL + "/elimina/123Test")
+		mockMvc.perform(MockMvcRequestBuilders.delete("api/articolo")
 			.contentType(MediaType.APPLICATION_JSON)
 			.content(ErrJsonDataMod)
 			.accept(MediaType.APPLICATION_JSON))

@@ -29,7 +29,10 @@ import com.xantrix.webapp.Application;
 @TestMethodOrder(OrderAnnotation.class)
 public class SelectArticoloTest {
 	private MockMvc mockMvc;
-	
+
+	private final String PROTOCOL = "http";
+	private final String HOST = "localhost";
+	private final String PORT  = "5051";
 	@Autowired
 	private WebApplicationContext webAppCtx;
 
@@ -38,8 +41,6 @@ public class SelectArticoloTest {
 		DefaultMockMvcBuilder webAppCtxSetup = MockMvcBuilders.webAppContextSetup(webAppCtx);
 		this.mockMvc = webAppCtxSetup.build();
 	}
-	
-	private final String API_BASE_URL = "/api/articoli";
 	
 	String JsonData =  
 			"{\n" + 
@@ -77,47 +78,47 @@ public class SelectArticoloTest {
 	public void testGetArticoliByBarcode() throws Exception {
 		final String theBarcode = "8008490000021";
 		
-		mockMvc.perform(MockMvcRequestBuilders.get(API_BASE_URL + "/cerca/" + theBarcode)
+		mockMvc.perform(MockMvcRequestBuilders.get(PROTOCOL + "://" + HOST + ":" + PORT + "/api/articolo/barcode/" + theBarcode)
 				.accept(MediaType.APPLICATION_JSON))
 				.andExpect(status().isOk())
 				.andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
 				 
 				//articoli
-				.andExpect(jsonPath("$.codArt").exists())
-				.andExpect(jsonPath("$.codArt").value("002000301"))
-				.andExpect(jsonPath("$.descrizione").exists())
-				.andExpect(jsonPath("$.descrizione").value("ACQUA ULIVETO 15 LT"))
-				.andExpect(jsonPath("$.um").exists())
-				.andExpect(jsonPath("$.um").value("PZ"))
-				.andExpect(jsonPath("$.codStat").exists())
-				.andExpect(jsonPath("$.codStat").value(""))
-				.andExpect(jsonPath("$.pzCart").exists())
-				.andExpect(jsonPath("$.pzCart").value("6"))
-				.andExpect(jsonPath("$.pesoNetto").exists())
-				.andExpect(jsonPath("$.pesoNetto").value("1.5"))
-				.andExpect(jsonPath("$.idStatoArt").exists())
-				.andExpect(jsonPath("$.idStatoArt").value("1"))
-				.andExpect(jsonPath("$.dataCreaz").exists())
-				.andExpect(jsonPath("$.dataCreaz").value("2010-06-14"))
-				 //barcode
-				.andExpect(jsonPath("$.barcode[0].barcode").exists())
-				.andExpect(jsonPath("$.barcode[0].barcode").value("8008490000021")) 
-				.andExpect(jsonPath("$.barcode[0].idTipoArt").exists())
-				.andExpect(jsonPath("$.barcode[0].idTipoArt").value("CP")) 
-				 //famAssort
-				.andExpect(jsonPath("$.famAssort.id").exists())
-				.andExpect(jsonPath("$.famAssort.id").value("1")) 
-				.andExpect(jsonPath("$.famAssort.descrizione").exists())
-				.andExpect(jsonPath("$.famAssort.descrizione").value("DROGHERIA ALIMENTARE")) 
-				 //ingredienti
-				.andExpect(jsonPath("$.ingredienti").isEmpty())
-				 //Iva
-				.andExpect(jsonPath("$.iva.idIva").exists())
-				.andExpect(jsonPath("$.iva.idIva").value("22")) 
-				.andExpect(jsonPath("$.iva.descrizione").exists())
-				.andExpect(jsonPath("$.iva.descrizione").value("IVA RIVENDITA 22%"))
-				.andExpect(jsonPath("$.iva.aliquota").exists())
-				.andExpect(jsonPath("$.iva.aliquota").value("22"))	
+				.andExpect(jsonPath("$.payload.codiceArticolo").exists())
+				.andExpect(jsonPath("$.payload.codiceArticolo").value("002000301"))
+				.andExpect(jsonPath("$.payload.descrizioneArticolo").exists())
+				.andExpect(jsonPath("$.payload.descrizioneArticolo").value("ACQUA ULIVETO 15 LT"))
+				.andExpect(jsonPath("$.payload.um").exists())
+				.andExpect(jsonPath("$.payload.um").value("PZ"))
+				.andExpect(jsonPath("$.payload.codiceStatisticoArticolo").exists())
+				.andExpect(jsonPath("$.payload.codiceStatisticoArticolo").value(""))
+				.andExpect(jsonPath("$.payload.pzCart").exists())
+				.andExpect(jsonPath("$.payload.pzCart").value("6"))
+				.andExpect(jsonPath("$.payload.pesoNettoArticolo").exists())
+				.andExpect(jsonPath("$.payload.pesoNettoArticolo").value("1.5"))
+				.andExpect(jsonPath("$.payload.idStatoArticolo").exists())
+				.andExpect(jsonPath("$.payload.idStatoArticolo").value("1"))
+				.andExpect(jsonPath("$.payload.dataCreazioneArticolo").exists())
+				.andExpect(jsonPath("$.payload.dataCreazioneArticolo").value("2010-06-14"))
+				 //barcode             
+				.andExpect(jsonPath("$.payload.codiciABarreArticolo[0].barcodeString").exists())
+				.andExpect(jsonPath("$.payload.codiciABarreArticolo[0].barcodeString").value("8008490000021")) 
+				.andExpect(jsonPath("$.payload.codiciABarreArticolo[0].idTipoArticolo").exists())
+				.andExpect(jsonPath("$.payload.codiciABarreArticolo[0].idTipoArticolo").value("CP")) 
+				 //famAssort           
+				.andExpect(jsonPath("$.payload.famigliaAssortimento.codice").exists())
+				.andExpect(jsonPath("$.payload.famigliaAssortimento.codice").value("1")) 
+				.andExpect(jsonPath("$.payload.famigliaAssortimento.descrizione").exists())
+				.andExpect(jsonPath("$.payload.famigliaAssortimento.descrizione").value("DROGHERIA ALIMENTARE")) 
+				 //ingredienti         
+				.andExpect(jsonPath("$.payload.ingredienteArticolo").isEmpty())
+				 //Iva                 
+				.andExpect(jsonPath("$.payload.ivaArticolo.codice").exists())
+				.andExpect(jsonPath("$.payload.ivaArticolo.codice").value("22")) 
+				.andExpect(jsonPath("$.payload.ivaArticolo.descrizione").exists())
+				.andExpect(jsonPath("$.payload.ivaArticolo.descrizione").value("IVA RIVENDITA 22%"))
+				.andExpect(jsonPath("$.payload.ivaArticolo.aliquota").exists())
+				.andExpect(jsonPath("$.payload.ivaArticolo.aliquota").value("22"))	
 				
 				.andDo(print());
 	}
@@ -128,7 +129,7 @@ public class SelectArticoloTest {
 	public void testGetArticolyByBarcode_KO() throws Exception {
 		final String theBarcode = "8008490002138";
 
-		mockMvc.perform(MockMvcRequestBuilders.get(API_BASE_URL + "/cerca/ean/" + theBarcode)
+		mockMvc.perform(MockMvcRequestBuilders.get(PROTOCOL + "://" + HOST + ":" + PORT + "api/articolo/barcode/" + theBarcode)
 				.contentType(MediaType.APPLICATION_JSON)
 				.content(JsonData)
 				.accept(MediaType.APPLICATION_JSON))
@@ -143,7 +144,7 @@ public class SelectArticoloTest {
 	public void testGetArticolyByCodArt() throws Exception {
 		final String theCodArt = "002000301";
 		
-		mockMvc.perform(MockMvcRequestBuilders.get(API_BASE_URL + "/cerca/codice/" + theCodArt)
+		mockMvc.perform(MockMvcRequestBuilders.get(PROTOCOL + "://" + HOST + ":" + PORT + "api/articolo/" + theCodArt)
 				.accept(MediaType.APPLICATION_JSON))
 				.andExpect(status().isOk())
 				.andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
@@ -157,7 +158,7 @@ public class SelectArticoloTest {
 	public void testArticolyByCodArt_KO() throws Exception {
 		final String theCodArt = "002000301b";
 
-		mockMvc.perform(MockMvcRequestBuilders.get(API_BASE_URL + "/cerca/codice/" + theCodArt)
+		mockMvc.perform(MockMvcRequestBuilders.get(PROTOCOL + "://" + HOST + ":" + PORT + "api/articolo/" + theCodArt)
 				.contentType(MediaType.APPLICATION_JSON)
 				.content(JsonData)
 				.accept(MediaType.APPLICATION_JSON))
@@ -174,7 +175,7 @@ public class SelectArticoloTest {
 	public void testGetArticoliByDescrizione() throws Exception {
 		final String theDescrizioneFilter = "ACQUA ULIVETO 15 LT";
 
-		mockMvc.perform(MockMvcRequestBuilders.get(API_BASE_URL + "/cerca/descrizione/" + theDescrizioneFilter)
+		mockMvc.perform(MockMvcRequestBuilders.get(PROTOCOL + "://" + HOST + ":" + PORT + "api/articolo?descrizione=" + theDescrizioneFilter)
 				.accept(MediaType.APPLICATION_JSON))
 				.andExpect(status().isOk())
 				.andExpect(jsonPath("$", hasSize(1)))
@@ -188,7 +189,7 @@ public class SelectArticoloTest {
 	public void testGetArticoliByDescrizione_KO() throws Exception {
 		final String theDescrizioneFilter = "123ABC";
 		
-		mockMvc.perform(MockMvcRequestBuilders.get(API_BASE_URL + "/cerca/descrizione/" + theDescrizioneFilter)
+		mockMvc.perform(MockMvcRequestBuilders.get(PROTOCOL + "://" + HOST + ":" + PORT + "api/articolo?descrizione=" + theDescrizioneFilter)
 				.accept(MediaType.APPLICATION_JSON))
 				.andExpect(status().isNotFound())
 				.andExpect(jsonPath("$.codice").value(404))

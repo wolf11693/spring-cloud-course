@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.xantrix.webapp.entity.Articolo;
@@ -59,9 +60,22 @@ public class ArticoloController {
 		return new ResponseEntity<ResponseBody<ArticoloResource>>(responseBody, HttpStatus.OK);
 	}
 	
-	@GetMapping(path = "/barcode/{barcodeValue}")
+	@GetMapping(params = "descrizioneLike")
+	public ResponseEntity<ResponseBody<ArticoliResource>> getArticoliByDescrizioneLike(
+			@RequestParam(value = "descrizioneLike", required = true) String theDescrizioneLike) {
+		LOG.info("** GET api/articolo?descrizioneLike={} - getArticoliByDescrizioneLike - descrizioneLike={} - START **", theDescrizioneLike, theDescrizioneLike);
+		
+		List<Articolo> articoliFetched = this.articoloService.getByDescrizioneLike(theDescrizioneLike);
+		ArticoliResource articoloResource = articoliResTransf.getResourceByModel(articoliFetched);
+		ResponseBody<ArticoliResource> responseBody = new ResponseBody<>(articoloResource);
+		
+		LOG.info("** GET api/articolo?descrizioneLike={} - getArticoliByDescrizioneLike - END **", theDescrizioneLike);
+		return new ResponseEntity<ResponseBody<ArticoliResource>>(responseBody, HttpStatus.OK);
+	}
+	
+	@GetMapping(path = "/barcode/{theBarcode}")
 	public ResponseEntity<ResponseBody<ArticoloResource>> getArticoloByBarcode(
-			@PathVariable(value = "barcode") String barcodeValue) {
+			@PathVariable(value = "theBarcode") String barcodeValue) {
 		LOG.info("** GET api/articolo/barcode/{} - getArticoloByBarcode - barcode={} - START **", barcodeValue, barcodeValue);
 		
 		Articolo articoloFetched = this.articoloService.getByBarcode(barcodeValue);

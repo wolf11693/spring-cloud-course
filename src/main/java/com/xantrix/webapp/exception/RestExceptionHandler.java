@@ -8,48 +8,43 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
+import com.xantrix.webapp.controller.exception.BindingException;
+import com.xantrix.webapp.controller.exception.DuplicateException;
+import com.xantrix.webapp.controller.exception.NotFoundException;
+import com.xantrix.webapp.response.ResponseBody;
+import com.xantrix.webapp.response.ResponsePayload;
+
 @ControllerAdvice
 @RestController
 public class RestExceptionHandler extends ResponseEntityExceptionHandler {
-	
-	@ExceptionHandler(NotFoundException.class)
-	public final ResponseEntity<ErrorResponse> exceptionNotFoundHandler(Exception ex) {
-		ErrorResponse errore = new ErrorResponse();
 
-		errore.setCodice(HttpStatus.NOT_FOUND.value());
-		errore.setMessaggio(ex.getMessage());
+	@ExceptionHandler(value = NotFoundException.class)
+	public final ResponseEntity<ResponseBody<?>> exceptionNotFoundHandler(Exception ex) {
+		ResponseBody<ResponsePayload> response = new ResponseBody<ResponsePayload>(null);
+		response.addMessage(ex.getMessage());
 
-		return new ResponseEntity<ErrorResponse>(errore, new HttpHeaders(), HttpStatus.NOT_FOUND);
+		return new ResponseEntity<ResponseBody<?>>(response, new HttpHeaders(), HttpStatus.NOT_FOUND);
 	}
 
-	@ExceptionHandler(BindingException.class)
-	public ResponseEntity<ErrorResponse> exceptionBindingHandler(Exception ex) {
-		ErrorResponse errore = new ErrorResponse();
+	@ExceptionHandler(value = {BindingException.class, Exception.class})
+	public ResponseEntity<ResponseBody<?>> exceptionBindingHandler(Exception ex) {
+		ResponseBody<ResponsePayload> response = new ResponseBody<ResponsePayload>(null);
+		
+		if(ex instanceof BindingException) {
+			response.addMessage(ex.getMessage());
+		} else {
+			response.addMessage("La richiesta non può essere eseguita a causa di un errore generico");
+		}
+		response.addMessage(ex.getMessage());
 
-		errore.setCodice(HttpStatus.BAD_REQUEST.value());
-		errore.setMessaggio(ex.getMessage());
-
-		return new ResponseEntity<ErrorResponse>(errore, new HttpHeaders(), HttpStatus.BAD_REQUEST);
+		return new ResponseEntity<ResponseBody<?>>(response, new HttpHeaders(), HttpStatus.BAD_REQUEST);
 	}
 
 	@ExceptionHandler(DuplicateException.class)
-	public ResponseEntity<ErrorResponse> exceptionDeplicateRecordHandler(Exception ex) {
-		ErrorResponse errore = new ErrorResponse();
+	public ResponseEntity<ResponseBody<?>> exceptionDeplicateRecordHandler(Exception ex) {
+		ResponseBody<ResponsePayload> response = new ResponseBody<ResponsePayload>(null);
+		response.addMessage(ex.getMessage());
 
-		errore.setCodice(HttpStatus.NOT_ACCEPTABLE.value());
-		errore.setMessaggio(ex.getMessage());
-
-		return new ResponseEntity<ErrorResponse>(errore, HttpStatus.NOT_ACCEPTABLE);
+		return new ResponseEntity<ResponseBody<?>>(response, new HttpHeaders(), HttpStatus.NOT_ACCEPTABLE);
 	}
-
-	@ExceptionHandler(Exception.class)
-	public ResponseEntity<ErrorResponse> exceptionHandler(Exception ex) {
-		ErrorResponse errore = new ErrorResponse();
-
-		errore.setMessaggio("La richiesta non può essere eseguita a causa di un errore generico");
-		errore.setCodice(HttpStatus.BAD_REQUEST.value());
-
-		return new ResponseEntity<ErrorResponse>(errore, HttpStatus.BAD_REQUEST);
-	}
-
 }
