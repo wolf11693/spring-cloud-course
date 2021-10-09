@@ -10,7 +10,7 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 
 import com.xantrix.webapp.controller.exception.BindingException;
 import com.xantrix.webapp.controller.exception.DuplicateException;
-import com.xantrix.webapp.controller.exception.NotFoundException;
+import com.xantrix.webapp.controller.exception.ResourceNotFoundException;
 import com.xantrix.webapp.response.ResponseBody;
 import com.xantrix.webapp.response.ResponsePayload;
 
@@ -18,23 +18,17 @@ import com.xantrix.webapp.response.ResponsePayload;
 @RestController
 public class RestExceptionHandler extends ResponseEntityExceptionHandler {
 
-	@ExceptionHandler(value = NotFoundException.class)
+	@ExceptionHandler(value = ResourceNotFoundException.class)
 	public final ResponseEntity<ResponseBody<?>> exceptionNotFoundHandler(Exception ex) {
 		ResponseBody<ResponsePayload> response = new ResponseBody<ResponsePayload>(null);
 		response.addMessage(ex.getMessage());
-
+		
 		return new ResponseEntity<ResponseBody<?>>(response, new HttpHeaders(), HttpStatus.NOT_FOUND);
 	}
 
 	@ExceptionHandler(value = {BindingException.class, Exception.class})
 	public ResponseEntity<ResponseBody<?>> exceptionBindingHandler(Exception ex) {
 		ResponseBody<ResponsePayload> response = new ResponseBody<ResponsePayload>(null);
-		
-		if(ex instanceof BindingException) {
-			response.addMessage(ex.getMessage());
-		} else {
-			response.addMessage("La richiesta non può essere eseguita a causa di un errore generico");
-		}
 		response.addMessage(ex.getMessage());
 
 		return new ResponseEntity<ResponseBody<?>>(response, new HttpHeaders(), HttpStatus.BAD_REQUEST);

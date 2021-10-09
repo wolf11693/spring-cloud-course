@@ -10,6 +10,9 @@ public class ArticoloResourceTransformer implements ResourceTransfromer<Articolo
 
 	@Override
 	public ArticoloResource transformFrom(Articolo artModel) {
+		if(artModel == null) {
+			return null;
+		}
 		return this.mapObjModelToResource(artModel);
 	}
 
@@ -17,7 +20,7 @@ public class ArticoloResourceTransformer implements ResourceTransfromer<Articolo
 		ArticoloResource artResource = new ArticoloResource();
 
 		artResource
-			.setCodice(artModel.getCodice())
+			.setId(artModel.getId())
 			.setDescrizione(artModel.getDescrizione())
 			.setUm(artModel.getUm())
 			.setCodiceStatistico(artModel.getCodiceStatistico())

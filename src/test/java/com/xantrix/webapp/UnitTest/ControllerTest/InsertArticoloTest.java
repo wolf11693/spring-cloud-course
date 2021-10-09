@@ -33,6 +33,11 @@ import com.xantrix.webapp.service.ArticoloService;
 public class InsertArticoloTest {
 	 
     private MockMvc mockMvc;
+    
+    private final String PROTOCOL = "http";
+	private final String HOST = "localhost";
+	private final String PORT  = "5051";
+	private final String PROT_HOST_PORT = PROTOCOL + "://" + HOST + ":" + PORT;
 
     @Mock
 	private ArticoloService articoloService;
@@ -78,11 +83,11 @@ public class InsertArticoloTest {
 	@Order(1)
 	public void testInsertArticolo() throws Exception {
 		Articolo articolo = new Articolo();
-		articolo.setCodice("123Test");
+		articolo.setId("123Test");
 		
-		when(this.articoloService.getByCodice("123Test")).thenReturn(articolo);
+		when(this.articoloService.getById("123Test")).thenReturn(articolo);
 		
-		mockMvc.perform(MockMvcRequestBuilders.post("api/articolo")
+		mockMvc.perform(MockMvcRequestBuilders.post(PROT_HOST_PORT + "api/articolo")
 			.contentType(MediaType.APPLICATION_JSON)
 			.content(JsonData)
 			.accept(MediaType.APPLICATION_JSON))
@@ -91,15 +96,15 @@ public class InsertArticoloTest {
 			.andExpect(jsonPath("$.message").value("Inserimento Articolo 123Test Eseguita Con Successo"))
 			.andDo( print() );
 
-				assertThat(this.articoloService.getByCodice("123Test"))
-					.extracting(Articolo::getCodice)
-					.isEqualTo("123Test");
+			assertThat(this.articoloService.getById("123Test"))
+				.extracting(Articolo::getId)
+				.isEqualTo("123Test");
 	}
 	
 	@Test
 	@Order(2)
 	public void testInsertArticolo_KO_406() throws Exception {
-		mockMvc.perform(MockMvcRequestBuilders.post("api/articolo")
+		mockMvc.perform(MockMvcRequestBuilders.post(PROT_HOST_PORT + "api/articolo")
 			.contentType(MediaType.APPLICATION_JSON)
 			.content(JsonData)
 			.accept(MediaType.APPLICATION_JSON))
@@ -140,7 +145,7 @@ public class InsertArticoloTest {
 	@Test
 	@Order(3)
 	public void testInsertArticolo_KO_400() throws Exception {
-		mockMvc.perform(MockMvcRequestBuilders.post("api/articolo")
+		mockMvc.perform(MockMvcRequestBuilders.post(PROT_HOST_PORT + "api/articolo")
 			.contentType(MediaType.APPLICATION_JSON)
 			.content(ErrJsonData)
 			.accept(MediaType.APPLICATION_JSON))
@@ -184,9 +189,9 @@ public class InsertArticoloTest {
 		Articolo articolo = new Articolo();
 		articolo.setIdStatoArticolo("2");
 		
-		when(this.articoloService.getByCodice("123Test")).thenReturn(articolo);
+		when(this.articoloService.getById("123Test")).thenReturn(articolo);
 		
-		mockMvc.perform(MockMvcRequestBuilders.put("api/articolo")
+		mockMvc.perform(MockMvcRequestBuilders.put(PROT_HOST_PORT + "api/articolo")
 				.contentType(MediaType.APPLICATION_JSON)
 				.content(JsonDataMod)
 				.accept(MediaType.APPLICATION_JSON))
@@ -195,7 +200,7 @@ public class InsertArticoloTest {
 				.andExpect(jsonPath("$.message").value("Modifica Articolo 123Test Eseguita Con Successo"))
 				.andDo(print());
 		
-		assertThat(this.articoloService.getByCodice("123Test"))
+		assertThat(this.articoloService.getById("123Test"))
 			.extracting(Articolo::getIdStatoArticolo)
 			.isEqualTo("2");
 		
@@ -232,7 +237,7 @@ public class InsertArticoloTest {
 	@Test
 	@Order(5)
 	public void testUpdateArticolo_KO_404() throws Exception {
-		mockMvc.perform(MockMvcRequestBuilders.put("api/articolo")
+		mockMvc.perform(MockMvcRequestBuilders.put(PROT_HOST_PORT + "api/articolo")
 			.contentType(MediaType.APPLICATION_JSON)
 			.content(ErrJsonDataMod)
 			.accept(MediaType.APPLICATION_JSON))
@@ -245,7 +250,7 @@ public class InsertArticoloTest {
 	@Test
 	@Order(6)
 	public void testDeleteArticolo() throws Exception {
-		mockMvc.perform(MockMvcRequestBuilders.delete("api/articolo")
+		mockMvc.perform(MockMvcRequestBuilders.delete(PROT_HOST_PORT + "api/articolo")
 			.accept(MediaType.APPLICATION_JSON))
 			.andExpect(status().isOk())
 			.andExpect(jsonPath("$.code").value("200 OK"))
@@ -256,7 +261,7 @@ public class InsertArticoloTest {
 	@Test
 	@Order(7)
 	public void testDeleteArticolo_KO_404() throws Exception {
-		mockMvc.perform(MockMvcRequestBuilders.delete("api/articolo")
+		mockMvc.perform(MockMvcRequestBuilders.delete(PROT_HOST_PORT + "api/articolo")
 			.contentType(MediaType.APPLICATION_JSON)
 			.content(ErrJsonDataMod)
 			.accept(MediaType.APPLICATION_JSON))

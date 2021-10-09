@@ -30,7 +30,7 @@ public class Articolo implements Serializable {
 
 	@Id
 	@Column(name = "CODART")
-	private String codice;
+	private String id;
 
 	@Column(name = "DESCRIZIONE")
 	private String descrizione;
@@ -75,12 +75,12 @@ public class Articolo implements Serializable {
 	// [ARTICOLO]--(1,N)-------<==>-------(1,1)-- [FAMIGLIA_ASSORTIMENTO]
 	private FamigliaAssortimento famigliaAssortimento;
 
-	public String getCodice() {
-		return codice;
+	public String getId() {
+		return id;
 	}
 
-	public Articolo setCodice(String codice) {
-		this.codice = codice;
+	public Articolo setId(String id) {
+		this.id = id;
 		return this;
 	}
 
@@ -186,8 +186,8 @@ public class Articolo implements Serializable {
 	@Override
 	public String toString() {
 		StringBuilder builder = new StringBuilder();
-		builder.append("Articolo [codice=");
-		builder.append(codice);
+		builder.append("Articolo [id=");
+		builder.append(id);
 		builder.append(", descrizione=");
 		builder.append(descrizione);
 		builder.append(", um=");

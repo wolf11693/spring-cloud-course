@@ -12,6 +12,9 @@ public class ArticoliResourceTransformer implements ResourceTransfromer<Articoli
 
 	@Override
 	public ArticoliResource transformFrom(List<Articolo> artListModel) {
+		if(artListModel == null) {
+			return null;
+		}
 		return this.mapObjModelToResource(artListModel);
 	}
 

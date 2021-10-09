@@ -4,14 +4,9 @@ import java.util.List;
 
 import com.xantrix.webapp.entity.Articolo;
 
-public interface ArticoloService {
-	public List<Articolo> getAll();
-	
-	public Articolo getByCodice(String theCodiceArticolo);
+public interface ArticoloService extends GenericService<Articolo, String>{
 	
 	public List<Articolo> getByDescrizioneLike(String theDescrzioneFilter);
 	
 	public Articolo getByBarcode(String theBarcodeValue);
-	
-	public Articolo insert(Articolo articolo);
 }

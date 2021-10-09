@@ -1,14 +1,18 @@
 package com.xantrix.webapp.UnitTest.RepositoryTest;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.util.HashSet;
 import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.Optional;
 import java.util.Set;
 
 import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
+import org.junit.jupiter.api.function.Executable;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
@@ -26,6 +30,7 @@ import com.xantrix.webapp.repository.ArticoloRepository;
 @ContextConfiguration(classes = Application.class)
 @TestMethodOrder(OrderAnnotation.class)
 public class ArticoloRepositoryTest {
+	
 	@Autowired
 	private ArticoloRepository articoloRepository;
 
@@ -35,14 +40,14 @@ public class ArticoloRepositoryTest {
 		Articolo articolo = this.createArticoloMock();
 		this.articoloRepository.save(articolo);
 
-		assertThat(this.articoloRepository.findByCodice("123Test"))
+		assertThat(this.articoloRepository.findById("123Test").get())
 			.extracting(Articolo::getDescrizione)
 			.isEqualTo("Articolo di Test");
 	}
 
 	private Articolo createArticoloMock() {
 		Articolo articolo = new Articolo();
-		articolo.setCodice("123Test");
+		articolo.setId("123Test");
 		articolo.setDescrizione("Articolo di Test");
 		articolo.setFamigliaAssortimento(this.createFamigliaAssortimento());
 		articolo.setBarcodes(this.createBarcodesByArticolo(articolo));
@@ -85,12 +90,12 @@ public class ArticoloRepositoryTest {
 				.isEqualTo("Articolo di Test");
 	}
 
-	@Test
+	@Test()
 	@Order(4)
 	public void testDeleteArticolo() {
-		Articolo articolo = this.articoloRepository.findByCodice("123Test");
+		Articolo articolo = this.articoloRepository.findById("123Test").get();
 		this.articoloRepository.delete(articolo);
-		assertNull(this.articoloRepository.findByCodice("123Test"));
+		Optional<Articolo> articoloOpt = this.articoloRepository.findById("123Test");
+		assertThrows(NoSuchElementException.class, () -> articoloOpt.get());
 	}
-
 }

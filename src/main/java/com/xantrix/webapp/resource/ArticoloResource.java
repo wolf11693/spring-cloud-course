@@ -17,7 +17,7 @@ public class ArticoloResource implements Serializable, Resource {
 	private static final long serialVersionUID = -5794820242221303814L;
 
 	@JsonProperty(value = "codiceArticolo")
-	private String codice;
+	private String id;
 
 	@JsonProperty(value = "descrizioneArticolo")
 	private String descrizione;
@@ -52,12 +52,12 @@ public class ArticoloResource implements Serializable, Resource {
 	@JsonProperty(value = "famigliaAssortimento")
 	private FamigliaAssortimento famigliaAssortimento;
 
-	public String getCodice() {
-		return codice;
+	public String getId() {
+		return id;
 	}
 
-	public ArticoloResource setCodice(String codice) {
-		this.codice = codice;
+	public ArticoloResource setId(String id) {
+		this.id = id;
 		return this;
 	}
 
@@ -163,8 +163,8 @@ public class ArticoloResource implements Serializable, Resource {
 	@Override
 	public String toString() {
 		StringBuilder builder = new StringBuilder();
-		builder.append("ArticoloResource [codice=");
-		builder.append(codice);
+		builder.append("ArticoloResource [id=");
+		builder.append(id);
 		builder.append(", descrizione=");
 		builder.append(descrizione);
 		builder.append(", um=");

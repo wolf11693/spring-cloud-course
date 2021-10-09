@@ -1,6 +1,7 @@
 package com.xantrix.webapp.repository;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -12,7 +13,7 @@ import com.xantrix.webapp.entity.Articolo;
 @Repository
 public interface ArticoloRepository extends JpaRepository<Articolo, String> {
 
-	public Articolo findByCodice(String codice);
+	public Optional<Articolo> findById(String id);
 	
 	public List<Articolo> findByDescrizioneLike(String descrizioneFilter);
 	
